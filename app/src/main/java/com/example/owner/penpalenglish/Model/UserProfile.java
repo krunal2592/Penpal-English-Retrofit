@@ -1,51 +1,30 @@
 package com.example.owner.penpalenglish.Model;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 public class UserProfile implements Serializable {
 
-    @SerializedName("userID")
     private Integer userID;
-
-    @SerializedName("firstName")
     private String firstName;
-    @SerializedName("lastName")
     private String lastName;
-    @SerializedName("sex")
     private String sex;
-    @SerializedName("birthYear")
     private String birthYear;
-    @SerializedName("country")
     private String country;
-    @SerializedName("school")
     private String school;
-    @SerializedName("hobby")
     private String hobby;
-    @SerializedName("introduction")
     private String introduction;
     private String userProfilePhoto;
     private Double rating;
-    @SerializedName("credit")
     private Integer credit;
-    @SerializedName("isTeacher")
     private String isTeacher;
-    @SerializedName("latitude")
     private Double latitude;
-    @SerializedName("longitude")
     private Double longitude;
-    @SerializedName("presenceState")
     private String presenceState;
-    @SerializedName("timestamp")
     private Long timestamp;
-    @SerializedName("unitProce")
     private Double unitPrice;
-    @SerializedName("userAlias")
     private String userAlias;
-    @SerializedName("userPhotos")
     private Set<UserPhoto> userPhotos = new HashSet<UserPhoto>();;
 
 
