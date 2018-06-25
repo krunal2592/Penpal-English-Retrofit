@@ -52,6 +52,8 @@ public class UserDAO extends SQLiteOpenHelper {
 
     public void dbinsert(UserProfile userProfile)
     {
+
+        UserProfile userProfile1 = new UserProfile();
         SQLiteDatabase db = getWritableDatabase();
 
         ContentValues userData = getUserContentValues(userProfile);
@@ -88,6 +90,8 @@ public class UserDAO extends SQLiteOpenHelper {
 
     public List<UserProfile> searchUser()
     {
+
+
         String sql = "SELECT * FROM tbl_UserProfile;";
         SQLiteDatabase db = getReadableDatabase();
 

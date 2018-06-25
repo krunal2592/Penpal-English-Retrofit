@@ -1,6 +1,7 @@
 package com.example.owner.penpalenglish.Model;
 
 import com.google.gson.annotations.SerializedName;
+import com.j256.ormlite.field.DatabaseField;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -8,45 +9,85 @@ import java.util.Set;
 
 public class UserProfile implements Serializable {
 
+    @DatabaseField(columnName = "userID")
     @SerializedName("userID")
     private Integer userID;
 
+    @DatabaseField(columnName = "firstName")
     @SerializedName("firstName")
     private String firstName;
+
+    @DatabaseField(columnName = "lastName")
     @SerializedName("lastName")
     private String lastName;
+
+    @DatabaseField(columnName = "sex")
     @SerializedName("sex")
     private String sex;
+
+    @DatabaseField(columnName = "birthYear")
     @SerializedName("birthYear")
     private String birthYear;
+
+    @DatabaseField(columnName = "country")
     @SerializedName("country")
     private String country;
+
+    @DatabaseField(columnName = "school")
     @SerializedName("school")
     private String school;
+
+    @DatabaseField(columnName = "hobby")
     @SerializedName("hobby")
     private String hobby;
+
+    @DatabaseField(columnName = "introduction")
     @SerializedName("introduction")
     private String introduction;
+
+    @DatabaseField(columnName = "userProfilePhoto")
     private String userProfilePhoto;
     private Double rating;
+
+    @DatabaseField(columnName = "credit")
     @SerializedName("credit")
     private Integer credit;
+
+    @DatabaseField(columnName = "isTeacher")
     @SerializedName("isTeacher")
     private String isTeacher;
+
+    @DatabaseField(columnName = "latitude")
     @SerializedName("latitude")
     private Double latitude;
+
+    @DatabaseField(columnName = "longitude")
     @SerializedName("longitude")
     private Double longitude;
+
+    @DatabaseField(columnName = "presenceState")
     @SerializedName("presenceState")
     private String presenceState;
+
+    @DatabaseField(columnName = "timestamp")
     @SerializedName("timestamp")
     private Long timestamp;
-    @SerializedName("unitProce")
+
+    @DatabaseField(columnName = "unitPrice")
+    @SerializedName("unitPrice")
     private Double unitPrice;
+
+    @DatabaseField(columnName = "userAlias")
     @SerializedName("userAlias")
     private String userAlias;
+
     @SerializedName("userPhotos")
     private Set<UserPhoto> userPhotos = new HashSet<UserPhoto>();;
+
+
+
+
+    public UserProfile(){}
 
 
    public Integer getUserID()

@@ -1,17 +1,25 @@
 package com.example.owner.penpalenglish.Model;
 
 
+import com.j256.ormlite.field.DatabaseField;
 
 public class UserPhoto {
 
-
+    @DatabaseField(columnName = "photoId")
     protected Integer photoId;
 
+    @DatabaseField(columnName = "userId")
     protected Integer userId;
 
+    @DatabaseField(columnName = "fileName")
     protected String fileName;
 
+    @DatabaseField(columnName = "avatar")
     protected Integer avatar;
+
+
+    //Default Constructor
+    public UserPhoto(){}
 
     public Integer getAvatar() {
         return avatar;

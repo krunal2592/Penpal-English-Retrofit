@@ -21,8 +21,7 @@ import java.util.List;
 
 public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.CustomViewHolder> {
 
-    private UserDAO userDAO;
-    private UserPhotoDAO userPhotoDAO;
+    
     private List<UserProfile> dataList;
 
     private Context context;
@@ -60,10 +59,8 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
     @Override
     public void onBindViewHolder(CustomViewHolder holder, int position) {
 
-        userDAO = new UserDAO(context);
-        userPhotoDAO = new UserPhotoDAO(context);
-        userDAO.dbinsert(dataList.get(position));
-        userPhotoDAO.dbinsert((UserPhoto) dataList.get(position).getUserPhotos());
+
+
 
         if ((dataList.get(position).getFirstName() != null) && (dataList.get(position).getFirstName() != null) ) {
             holder.txtName.setText(dataList.get(position).getFirstName() + " " + dataList.get(position).getLastName());
