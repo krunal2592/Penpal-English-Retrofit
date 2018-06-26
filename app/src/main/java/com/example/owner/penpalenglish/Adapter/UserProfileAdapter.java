@@ -70,10 +70,19 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
             Picasso.Builder builder = new Picasso.Builder(context);
             builder.downloader(new OkHttp3Downloader(context));
 
-            builder.build().load(String.valueOf(dataList.get(position).getUserPhotos()))
-                    .placeholder((R.drawable.person))
-                    .error(R.drawable.person)
-                    .into(holder.userImage);
+            if(dataList.get(position).getUserProfilePhoto().equals(""))
+            {
+                Picasso.with(context).load(R.drawable.person).into(holder.userImage);
+            }
+            else {
+
+                Picasso.with(context).load(dataList.get(position).getUserProfilePhoto()).into(holder.userImage);
+//                builder.build().load(String.valueOf(dataList.get(position).getUserProfilePhoto()))
+//                        .placeholder((R.drawable.person))
+//                        .error(R.drawable.person)
+//                        .into(holder.userImage);
+            }
+
         }
     }
 

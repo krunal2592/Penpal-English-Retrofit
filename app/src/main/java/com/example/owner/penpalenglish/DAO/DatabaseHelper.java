@@ -13,8 +13,8 @@ import com.j256.ormlite.table.TableUtils;
 
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
-    private static final String DATABASE_NAME = "PENPALORM.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "PenpalInnovations.db";
+    private static final int DATABASE_VERSION = 3;
 
     private Dao<UserProfile, Integer> userDAO;
     private Dao<UserPhoto, Integer> userPhotoDAO;

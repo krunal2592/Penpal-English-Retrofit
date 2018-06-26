@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import com.j256.ormlite.field.DatabaseField;
 
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class UserProfile implements Serializable {
@@ -82,7 +82,7 @@ public class UserProfile implements Serializable {
     private String userAlias;
 
     @SerializedName("userPhotos")
-    private Set<UserPhoto> userPhotos = new HashSet<UserPhoto>();;
+    private List<UserPhoto> userPhotos;
 
 
 
@@ -253,11 +253,11 @@ public class UserProfile implements Serializable {
     { this.timestamp = timestamp;}
 
 
-    public Set<UserPhoto> getUserPhotos() {
+    public List<UserPhoto> getUserPhotos() {
         return userPhotos;
     }
 
-    public void setUserPhotos(Set<UserPhoto> userPhotos) {
+    public void setUserPhotos(List<UserPhoto> userPhotos) {
         this.userPhotos = userPhotos;
     }
 

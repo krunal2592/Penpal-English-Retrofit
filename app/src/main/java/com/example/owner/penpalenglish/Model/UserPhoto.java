@@ -17,6 +17,9 @@ public class UserPhoto {
     @DatabaseField(columnName = "avatar")
     protected Integer avatar;
 
+    @DatabaseField(columnName = "photoPath")
+    protected String photopath;
+
 
     //Default Constructor
     public UserPhoto(){}
@@ -31,22 +34,32 @@ public class UserPhoto {
     public boolean isAvatar(){
         return avatar.intValue()==1;
     }
+
     public Integer getPhotoId() {
         return photoId;
     }
     public void setPhotoId(Integer photoId) {
         this.photoId = photoId;
     }
+
     public Integer getUserId() {
         return userId;
     }
     public void setUserId(Integer userId) {
         this.userId = userId;
     }
+
     public String getFileName() {
         return fileName;
     }
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public String getPhotopath() {
+        return photopath;
+    }
+    public void setPhotopath(String photopath) {
+        this.photopath = photopath;
     }
 }

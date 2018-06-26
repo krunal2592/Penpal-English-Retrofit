@@ -20,6 +20,7 @@ import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
 
-                    generateDataList(response.body());
+                    populateView(response.body());
 
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -103,10 +104,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /*Method to generate List of data using RecyclerView with custom adapter*/
-    private void generateDataList(List<UserProfile> userList) throws SQLException {
+    private void populateView(List<UserProfile> userList) throws SQLException {
 
         final Dao<UserProfile, Integer> userDAO = getHelper().getUserDAO();
-        if(userDAO.queryForAll().size()<0) {
+        if(userDAO.queryForAll().size()<1) {
             InsertData(userList);
         }
 
@@ -117,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(adapter);
-        }
+       }
     }
 
     // Method for Inserting Data into a Table
@@ -130,6 +131,8 @@ public class MainActivity extends AppCompatActivity {
 
             UserProfile user = new UserProfile();
             UserPhoto userPhoto = new UserPhoto();
+           List<UserPhoto> userPhotos;
+            //Class<? extends Set> userPhoto = new Class<>();
             for(int i=0;i<=userList.size();i++) {
                 user.setUserID(userList.get(i).getUserID());
                 user.setFirstName(userList.get(i).getFirstName());
@@ -148,15 +151,39 @@ public class MainActivity extends AppCompatActivity {
                 user.setTimestamp(userList.get(i).getTimestamp());
                 user.setUserPhotos(userList.get(i).getUserPhotos());
 
-                int count = userList.get(i).getUserPhotos().size();
-
+                userPhotos = (List<UserPhoto>) userList.get(i).getUserPhotos();
+                int count = userPhotos.size();
                 if(userList.get(i).getUserPhotos().size()>0)
                 {
-                    for(int j =0; j<userList.get(i).getUserPhotos().size(); j++)
+                    for(int j =0; j<userPhotos.size(); j++)
                     {
+                        Integer pid = userPhotos.get(j).getPhotoId();
+                        Integer uid = userPhotos.get(j).getUserId();
+
+                        userPhoto.setPhotoId(userPhotos.get(j).getPhotoId());
+
+                        userPhoto.setUserId(userPhotos.get(j).getUserId());
+                        userPhoto.setFileName(userPhotos.get(j).getFileName());
+
+                       if(userPhotos.get(j).getAvatar() == 1) {
+                           user.setUserProfilePhoto("http://54.148.5.0:8080/giaserver/" + uid + "/profile/media/" + pid);
+                           userPhoto.setAvatar(userPhotos.get(j).getAvatar());
+                       }
+                       else
+                       {
+                           userPhoto.setAvatar(userPhotos.get(j).getAvatar());
+                       }
+
+                       userPhoto.setPhotopath("http://54.148.5.0:8080/giaserver/" + uid + "/profile/media/" + pid);
+
+                       userPhotoDAO.create(userPhoto);
                     }
                 }
-               // userDAO.create(user);
+                else
+                {
+                    user.setUserProfilePhoto("");
+                }
+                userDAO.create(user);
             }
         } catch (SQLException e) {
             e.printStackTrace();
