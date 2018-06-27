@@ -17,7 +17,8 @@
                 android:id="@+id/profile_pic"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/person"/>
+                android:src="@drawable/person"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -262,7 +262,9 @@ public class UserProfile implements Serializable {
     }
 
 
-
+    public void copy(UserProfile toUser){
+        toUser.setFirstName(this.getFirstName());
+    }
 
 
 }
