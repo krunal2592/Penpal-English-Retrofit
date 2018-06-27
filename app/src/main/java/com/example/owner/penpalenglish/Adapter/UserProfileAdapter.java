@@ -1,6 +1,8 @@
 package com.example.owner.penpalenglish.Adapter;
 
 import android.content.Context;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +40,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
         TextView txtName, txtCountry, txtIntroduction;
         private ImageView userImage;
 
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         CustomViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
@@ -46,9 +49,11 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
             txtCountry = mView.findViewById(R.id.country);
             txtIntroduction = mView.findViewById(R.id.introduction);
            userImage = mView.findViewById(R.id.profile_pic);
+            //userImage.setClipToOutline(true);
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
