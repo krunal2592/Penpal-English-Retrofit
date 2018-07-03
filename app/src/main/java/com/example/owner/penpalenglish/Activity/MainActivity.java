@@ -55,14 +55,18 @@ public class MainActivity extends AppCompatActivity {
                 try {
 
                     final Dao<UserProfile, Integer> userDAO = getHelper().getUserDAO();
-                    if(userDAO.queryForAll().size()<1) {
+                    if(userDAO.queryForAll().size()<1 ) {
                         InsertData(response.body());
                     }
 
-                    else {
-
+                    else
+                    {
+                        //Calling Method for Display Data on view
                         populateView();
                     }
+
+
+
 
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -76,6 +80,9 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
             }
         });
+
+
+
     }
 
     // This is how, DatabaseHelper can be initialized for future use
@@ -101,15 +108,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /*Method to generate List of data using RecyclerView with custom adapter*/
-    private void populateView() throws SQLException {
+    private void populateView()  {
 
-        final Dao<UserProfile, Integer> userDAO = getHelper().getUserDAO();
+        final Dao<UserProfile, Integer> userDAO;
+        try {
+            userDAO = getHelper().getUserDAO();
 
             recyclerView = findViewById(R.id.recyclerView);
             adapter = new UserProfileAdapter(this, userDAO.queryForAll());
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(adapter);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -127,9 +141,8 @@ public class MainActivity extends AppCompatActivity {
 
                 UserProfile userProfile = userList.get(i);
 
-
                 userPhotos = (List<UserPhoto>) userList.get(i).getUserPhotos();
-                int count = userPhotos.size();
+
                 if(userList.get(i).getUserPhotos().size()>0)
                 {
                     for(int j =0; j<userPhotos.size(); j++)
