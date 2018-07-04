@@ -35,20 +35,12 @@ public class MainActivity extends AppCompatActivity {
 
     private UserProfileAdapter adapter;
     private RecyclerView recyclerView;
-    ProgressDialog progressDoalog;
-    private UserDAO userDAO;
-    private UserPhotoDAO userPhotoDAO;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        userDAO = new UserDAO(this);
-//        userPhotoDAO = new UserPhotoDAO(this);
-//        progressDoalog = new ProgressDialog(MainActivity.this);
-//        progressDoalog.setMessage("Loading....");
-//        progressDoalog.show();
 
         /*Create handle for the RetrofitInstance interface*/
 
@@ -59,17 +51,23 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call<List<UserProfile>> call, Response<List<UserProfile>> response) {
-                // progressDoalog.dismiss();
-
 
                 try {
 
-                    populateView(response.body());
+                    final Dao<UserProfile, Integer> userDAO = getHelper().getUserDAO();
+                    int count = userDAO.queryForAll().size();
+                    if(userDAO.queryForAll().size()<1 ) {
+                        InsertData(response.body());
+                    }
+
+
+
+
+
 
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-
 
             }
 
@@ -79,6 +77,11 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
             }
         });
+
+        //populate the View
+        populateView();
+
+
     }
 
     // This is how, DatabaseHelper can be initialized for future use
@@ -104,21 +107,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /*Method to generate List of data using RecyclerView with custom adapter*/
-    private void populateView(List<UserProfile> userList) throws SQLException {
+    private void populateView()  {
 
-        final Dao<UserProfile, Integer> userDAO = getHelper().getUserDAO();
-        if(userDAO.queryForAll().size()<1) {
-            InsertData(userList);
-        }
-
-        else {
+        final Dao<UserProfile, Integer> userDAO;
+        try {
+            userDAO = getHelper().getUserDAO();
 
             recyclerView = findViewById(R.id.recyclerView);
             adapter = new UserProfileAdapter(this, userDAO.queryForAll());
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(adapter);
-       }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
     // Method for Inserting Data into a Table
@@ -129,61 +134,35 @@ public class MainActivity extends AppCompatActivity {
             final Dao<UserProfile, Integer> userDAO = getHelper().getUserDAO();
             final Dao<UserPhoto, Integer> userPhotoDAO = getHelper().getUserPhotoDAO();
 
-            UserProfile user = new UserProfile();
-            UserPhoto userPhoto = new UserPhoto();
-           List<UserPhoto> userPhotos;
-            //Class<? extends Set> userPhoto = new Class<>();
+            List<UserPhoto> userPhotos;
+
             for(int i=0;i<=userList.size();i++) {
-                user.setUserID(userList.get(i).getUserID());
-                user.setFirstName(userList.get(i).getFirstName());
-                user.setLastName(userList.get(i).getLastName());
-                user.setBirthYear(userList.get(i).getBirthYear());
-                user.setCountry(userList.get(i).getCountry());
-                user.setCredit(userList.get(i).getCredit());
-                user.setIsTeacher(userList.get(i).getIsTeacher());
-                user.setUserAlias(userList.get(i).getUserAlias());
-                user.setUnitPrice(userList.get(i).getUnitPrice());
-                user.setHobby(userList.get(i).getHobby());
-                user.setIntroduction(userList.get(i).getIntroduction());
-                user.setLatitude(userList.get(i).getLatitude());
-                user.setLongitude(userList.get(i).getLongitude());
-                user.setPresenceState(userList.get(i).getPresenceState());
-                user.setTimestamp(userList.get(i).getTimestamp());
-                user.setUserPhotos(userList.get(i).getUserPhotos());
+
+                UserProfile userProfile = userList.get(i);
 
                 userPhotos = (List<UserPhoto>) userList.get(i).getUserPhotos();
-                int count = userPhotos.size();
+
                 if(userList.get(i).getUserPhotos().size()>0)
                 {
                     for(int j =0; j<userPhotos.size(); j++)
                     {
-                        Integer pid = userPhotos.get(j).getPhotoId();
-                        Integer uid = userPhotos.get(j).getUserId();
+                        UserPhoto userPhoto = userPhotos.get(j);
 
-                        userPhoto.setPhotoId(userPhotos.get(j).getPhotoId());
+                        if(userPhoto.getAvatar() == 1) {
+                            userProfile.setUserProfilePhoto("http://54.148.5.0:8080/giaserver/" + userPhoto.getUserId() + "/profile/media/" + userPhoto.getPhotoId());
+                           }
 
-                        userPhoto.setUserId(userPhotos.get(j).getUserId());
-                        userPhoto.setFileName(userPhotos.get(j).getFileName());
-
-                       if(userPhotos.get(j).getAvatar() == 1) {
-                           user.setUserProfilePhoto("http://54.148.5.0:8080/giaserver/" + uid + "/profile/media/" + pid);
-                           userPhoto.setAvatar(userPhotos.get(j).getAvatar());
-                       }
-                       else
-                       {
-                           userPhoto.setAvatar(userPhotos.get(j).getAvatar());
-                       }
-
-                       userPhoto.setPhotopath("http://54.148.5.0:8080/giaserver/" + uid + "/profile/media/" + pid);
-
-                       userPhotoDAO.create(userPhoto);
+                        userPhoto.setPhotopath("http://54.148.5.0:8080/giaserver/" + userPhoto.getUserId() + "/profile/media/" + userPhoto.getPhotoId());
+                        userPhotoDAO.create(userPhoto);
                     }
                 }
                 else
                 {
-                    user.setUserProfilePhoto("");
+                    userProfile.setUserProfilePhoto("");
                 }
-                userDAO.create(user);
+
+                userDAO.create(userProfile);
+
             }
         } catch (SQLException e) {
             e.printStackTrace();

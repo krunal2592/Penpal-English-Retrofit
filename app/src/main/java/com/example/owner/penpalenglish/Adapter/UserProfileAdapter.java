@@ -1,6 +1,10 @@
 package com.example.owner.penpalenglish.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.media.MediaRouter;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.owner.penpalenglish.Activity.UserInfo;
 import com.example.owner.penpalenglish.DAO.UserDAO;
 import com.example.owner.penpalenglish.DAO.UserPhotoDAO;
 import com.example.owner.penpalenglish.Model.UserPhoto;
@@ -38,6 +43,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
         TextView txtName, txtCountry, txtIntroduction;
         private ImageView userImage;
 
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         CustomViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
@@ -46,9 +52,11 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
             txtCountry = mView.findViewById(R.id.country);
             txtIntroduction = mView.findViewById(R.id.introduction);
            userImage = mView.findViewById(R.id.profile_pic);
+            //userImage.setClipToOutline(true);
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
@@ -57,9 +65,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
     }
 
     @Override
-    public void onBindViewHolder(CustomViewHolder holder, int position) {
-
-
+    public void onBindViewHolder(CustomViewHolder holder, final int position) {
 
 
         if ((dataList.get(position).getFirstName() != null) && (dataList.get(position).getFirstName() != null) ) {
@@ -77,15 +83,24 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
             else {
 
                 Picasso.with(context).load(dataList.get(position).getUserProfilePhoto()).into(holder.userImage);
-//                builder.build().load(String.valueOf(dataList.get(position).getUserProfilePhoto()))
-//                        .placeholder((R.drawable.person))
-//                        .error(R.drawable.person)
-//                        .into(holder.userImage);
             }
 
         }
+
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //send this user id to chat messages activity
+                goToUserInfo(dataList.get(position).getUserID().toString());
+            }
+        });
     }
 
+    private void goToUserInfo(String personId) {
+        Intent goToUserInfo = new Intent(context, UserInfo.class);
+        goToUserInfo.putExtra("USER_ID", personId);
+        context.startActivity(goToUserInfo);
+    }
 
 
     @Override
