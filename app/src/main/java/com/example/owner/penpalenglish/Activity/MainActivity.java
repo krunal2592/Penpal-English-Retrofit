@@ -55,15 +55,12 @@ public class MainActivity extends AppCompatActivity {
                 try {
 
                     final Dao<UserProfile, Integer> userDAO = getHelper().getUserDAO();
+                    int count = userDAO.queryForAll().size();
                     if(userDAO.queryForAll().size()<1 ) {
                         InsertData(response.body());
                     }
 
-                    else
-                    {
-                        //Calling Method for Display Data on view
-                        populateView();
-                    }
+
 
 
 
@@ -81,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //populate the View
+        populateView();
 
 
     }

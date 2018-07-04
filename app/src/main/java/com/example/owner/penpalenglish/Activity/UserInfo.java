@@ -14,7 +14,9 @@ import com.example.owner.penpalenglish.Model.UserProfile;
 import com.example.owner.penpalenglish.R;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
 import com.squareup.picasso.Picasso;
 
 import java.sql.SQLException;
@@ -45,19 +47,27 @@ public class UserInfo extends AppCompatActivity {
 
             final Dao<UserProfile, Integer> userDAO = getHelper().getUserDAO();
             final Dao<UserPhoto, Integer> userPhotoDAO = getHelper().getUserPhotoDAO();
+            List<UserProfile> list;
 
 
-           user = userDAO.queryForId(Integer.valueOf(mUserID));
+            QueryBuilder<UserProfile, Integer> queryBuilder = userDAO.queryBuilder();
+            queryBuilder.where().eq("userID", mUserID);
+            list = queryBuilder.query();
 
-//           user = (UserProfile) userDAO.queryBuilder()
-//                    .where()
-//                    .eq(String.valueOf(user.getUserID()), mUserID)
-//                    .query();
+            for(int i =0;i<list.size(); i++) {
 
-            mUserName.setText(user.getFirstName() + " " + user.getLastName());
-            mUserCountry.setText(user.getCountry());
-            mUserSchool.setText(user.getSchool());
-            Picasso.with(this).load(user.getUserProfilePhoto()).into(mUserPhoto);
+                mUserName.setText(list.get(i).getFirstName() + " "+ list.get(i).getLastName());
+                mUserCountry.setText(list.get(i).getCountry());
+                mUserSchool.setText(list.get(i).getSchool());
+
+                if(list.get(i).getUserProfilePhoto().equals("")) {
+                    Picasso.with(this).load(R.drawable.person).into(mUserPhoto);
+                }
+                else
+                {
+                    Picasso.with(this).load(list.get(i).getUserProfilePhoto()).into(mUserPhoto);
+                }
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
