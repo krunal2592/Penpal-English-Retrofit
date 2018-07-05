@@ -21,6 +21,7 @@ import com.example.owner.penpalenglish.R;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -34,6 +35,12 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
     public UserProfileAdapter(Context context, List<UserProfile> dataList) {
         this.context = context;
         this.dataList = dataList;
+    }
+
+    public void getFliter(List<UserProfile> listItme) {
+        dataList = new ArrayList<>();
+        dataList.addAll(listItme);
+        notifyDataSetChanged();
     }
 
     class CustomViewHolder extends RecyclerView.ViewHolder {
