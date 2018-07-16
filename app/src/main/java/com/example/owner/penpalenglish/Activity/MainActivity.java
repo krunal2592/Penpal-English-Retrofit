@@ -1,100 +1,105 @@
 package com.example.owner.penpalenglish.Activity;
 
-import android.app.ProgressDialog;
 import android.graphics.Color;
+import android.graphics.Typeface;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.example.owner.penpalenglish.Adapter.UserProfileAdapter;
 import com.example.owner.penpalenglish.DAO.DatabaseHelper;
-import com.example.owner.penpalenglish.DAO.UserDAO;
-import com.example.owner.penpalenglish.DAO.UserPhotoDAO;
-import com.example.owner.penpalenglish.Model.UserPhoto;
 import com.example.owner.penpalenglish.Model.UserProfile;
 import com.example.owner.penpalenglish.R;
-import com.example.owner.penpalenglish.Service.GetDataService;
-import com.example.owner.penpalenglish.Service.RetrofitClientInstance;
+import com.example.owner.penpalenglish.Service.DataService;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.RawRowMapper;
+import com.j256.ormlite.stmt.QueryBuilder;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
     private DatabaseHelper databaseHelper = null;
 
-    private UserProfileAdapter adapter;
+    private UserProfileAdapter adapter, adapter1;
+
     private RecyclerView recyclerView;
-    SearchView searchView;
+
+    Button filter;
+    EditText search;
 
 
+
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*Create handle for the RetrofitInstance interface*/
+        filter = (Button) findViewById(R.id.filter);
+        filter.setClipToOutline(true);
 
-        GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
+        search = (EditText)findViewById(R.id.editTextSearch);
 
-        Call<List<UserProfile>> call = service.getAllUser();
-        call.enqueue(new Callback<List<UserProfile>>() {
-
-            @Override
-            public void onResponse(Call<List<UserProfile>> call, Response<List<UserProfile>> response) {
-
-                try {
-
-                    final Dao<UserProfile, Integer> userDAO = getHelper().getUserDAO();
-                    int count = userDAO.queryForAll().size();
-                    if(userDAO.queryForAll().size()<1 ) {
-                        InsertData(response.body());
-                    }
-
-
-
-
-
-
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<List<UserProfile>> call, Throwable t) {
-                // progressDoalog.dismiss();
-                Toast.makeText(MainActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        //populate the View
+        setTitle("1:1 TUTOR LIST");
+        final DataService service = new DataService();
+        Boolean data = service.GetDataFromServer();
         populateView();
 
 
+
+
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                adapter.setSearchList(String.valueOf(s));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+
+            }
+        });
     }
+
+
+
+
+
+
 
     // This is how, DatabaseHelper can be initialized for future use
     private DatabaseHelper getHelper() {
@@ -118,6 +123,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void setTitle(String title){
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        TextView textView = new TextView(this);
+        textView.setText(title);
+        textView.setTextSize(20);
+        textView.setTypeface(null, Typeface.BOLD);
+        textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        textView.setGravity(Gravity.CENTER);
+        textView.setTextColor(getResources().getColor(R.color.white));
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(textView);
+    }
+
     /*Method to generate List of data using RecyclerView with custom adapter*/
     private void populateView()  {
 
@@ -126,7 +145,11 @@ public class MainActivity extends AppCompatActivity {
             userDAO = getHelper().getUserDAO();
 
             recyclerView = findViewById(R.id.recyclerView);
-            adapter = new UserProfileAdapter(this, userDAO.queryForAll());
+
+
+            adapter1 = new UserProfileAdapter();
+            List<String> userIDList = adapter1.setAdapterData();
+            adapter = new UserProfileAdapter(this,userIDList);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
 
             recyclerView.setLayoutManager(layoutManager);
@@ -134,123 +157,15 @@ public class MainActivity extends AppCompatActivity {
 
         } catch (SQLException e) {
             e.printStackTrace();
-        }
 
-    }
-
-    // Method for Inserting Data into a Table
-
-    private void InsertData(List<UserProfile> userList)
-    {
-        try {
-            final Dao<UserProfile, Integer> userDAO = getHelper().getUserDAO();
-            final Dao<UserPhoto, Integer> userPhotoDAO = getHelper().getUserPhotoDAO();
-
-            List<UserPhoto> userPhotos;
-
-            for(int i=0;i<=userList.size();i++) {
-
-                UserProfile userProfile = userList.get(i);
-
-                userPhotos = (List<UserPhoto>) userList.get(i).getUserPhotos();
-
-                if(userList.get(i).getUserPhotos().size()>0)
-                {
-                    for(int j =0; j<userPhotos.size(); j++)
-                    {
-                        UserPhoto userPhoto = userPhotos.get(j);
-
-                        if(userPhoto.getAvatar() == 1) {
-                            userProfile.setUserProfilePhoto("http://54.148.5.0:8080/giaserver/" + userPhoto.getUserId() + "/profile/media/" + userPhoto.getPhotoId());
-                           }
-
-                        userPhoto.setPhotopath("http://54.148.5.0:8080/giaserver/" + userPhoto.getUserId() + "/profile/media/" + userPhoto.getPhotoId());
-                        userPhotoDAO.create(userPhoto);
-                    }
-                }
-                else
-                {
-                    userProfile.setUserProfilePhoto("");
-                }
-
-                userDAO.create(userProfile);
-
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
 
     }
 
 
-    @Override    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater mMenuInflater = getMenuInflater();
-        mMenuInflater.inflate(R.menu.search, menu);
 
 
-        final MenuItem myActionMenuItem = menu.findItem(R.id.search);
-        searchView = (SearchView) myActionMenuItem.getActionView();
-        changeSearchViewTextColor(searchView);
-        ((EditText) searchView.findViewById(
-                android.support.v7.appcompat.R.id.search_src_text)).
-                setHintTextColor(getResources().getColor(R.color.white));
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
 
-                return false;
-            }
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                try {
-                    final Dao<UserProfile, Integer> userDAO = getHelper().getUserDAO();
-                    final List<UserProfile> filtermodelist=filter(userDAO.queryForAll(),newText);
-                   // Log.d(TAG, "onQueryTextChange: "+ filtermodelist);
-                    adapter.getFliter(filtermodelist);
-
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                return true;
-            }
-        });
-
-        return true;
-    }
-    private List<UserProfile> filter(List<UserProfile> pl,String query)
-    {
-        query=query.toLowerCase();
-        final List<UserProfile> filteredModeList=new ArrayList<>();
-        for (UserProfile user:pl)
-        {
-            if(user.getFirstName()!= null)
-            {
-            final String name=user.getFirstName().toLowerCase();
-
-                if (name.startsWith(query) == true) {
-                    filteredModeList.add(user);
-                }
-            }
-        }
-        return filteredModeList;
-    }
-
-
-    private void changeSearchViewTextColor(View view) {
-        if (view != null) {
-            if (view instanceof TextView) {
-                (( TextView ) view).setTextColor(Color.WHITE);
-                return;
-            } else if (view instanceof ViewGroup) {
-                ViewGroup viewGroup = ( ViewGroup ) view;
-                for (int i = 0; i < viewGroup.getChildCount(); i++) {
-                    changeSearchViewTextColor(viewGroup.getChildAt(i));
-                }
-            }
-        }
-
-
-    }
 
 
 }

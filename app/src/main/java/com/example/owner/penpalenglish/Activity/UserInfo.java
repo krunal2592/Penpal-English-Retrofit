@@ -1,9 +1,13 @@
 package com.example.owner.penpalenglish.Activity;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.owner.penpalenglish.Adapter.ViewPhotoAdapter;
@@ -24,13 +28,22 @@ public class UserInfo extends AppCompatActivity {
     private DatabaseHelper databaseHelper = null;
     private String mUserID;
     private ImageView mUserPhoto;
-    private TextView mUserName, mUserCountry, mUserSchool;
+    private TextView mUserName, mUserCountry, mUserSchool,name;
     ViewPager viewPager;
+
+    private ActionBar toolbar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.userinfo);
+
+
+
+       setTitle("Krunal Patel");
+
+
 
         mUserID = getIntent().getStringExtra("USER_ID");
 
@@ -52,6 +65,19 @@ public class UserInfo extends AppCompatActivity {
 
     }
 
+    public void setTitle(String title){
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        TextView textView = new TextView(this);
+        textView.setText(title);
+        textView.setTextSize(20);
+        textView.setTypeface(null, Typeface.BOLD);
+        textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        textView.setGravity(Gravity.CENTER);
+        textView.setTextColor(getResources().getColor(R.color.white));
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(textView);
+    }
     private DatabaseHelper getHelper() {
         if (databaseHelper == null) {
             databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
