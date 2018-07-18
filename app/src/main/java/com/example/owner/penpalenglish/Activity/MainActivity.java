@@ -1,5 +1,6 @@
 package com.example.owner.penpalenglish.Activity;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -7,6 +8,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -21,6 +23,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -41,6 +44,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static android.graphics.drawable.ClipDrawable.HORIZONTAL;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -75,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -83,20 +89,26 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                adapter.setSearchList(String.valueOf(s));
+            public void onTextChanged(CharSequence searchString, int start, int before, int count) {
+                adapter.setSearchList(String.valueOf(searchString));
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                hideSoftKeyboard(MainActivity.this);
 
             }
         });
     }
 
 
-
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                activity.getCurrentFocus().getWindowToken(), 0);
+    }
 
 
 
@@ -135,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
         textView.setTextColor(getResources().getColor(R.color.white));
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(textView);
+
     }
 
     /*Method to generate List of data using RecyclerView with custom adapter*/
@@ -154,6 +167,9 @@ public class MainActivity extends AppCompatActivity {
 
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(adapter);
+
+            DividerItemDecoration itemDecor = new DividerItemDecoration(this, HORIZONTAL);
+            recyclerView.addItemDecoration(itemDecor);
 
         } catch (SQLException e) {
             e.printStackTrace();

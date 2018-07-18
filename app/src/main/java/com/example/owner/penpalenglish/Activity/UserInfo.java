@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.owner.penpalenglish.Adapter.ViewPhotoAdapter;
@@ -28,8 +29,10 @@ public class UserInfo extends AppCompatActivity {
     private DatabaseHelper databaseHelper = null;
     private String mUserID;
     private ImageView mUserPhoto;
-    private TextView mUserName, mUserCountry, mUserSchool,name;
+    private TextView mUserName, mUserHobby, mUserAbout;
+    private RatingBar rating;
     ViewPager viewPager;
+    ViewPhotoAdapter adapter;
 
     private ActionBar toolbar;
 
@@ -41,16 +44,17 @@ public class UserInfo extends AppCompatActivity {
 
 
 
-       setTitle("Krunal Patel");
 
+adapter = new ViewPhotoAdapter();
 
 
         mUserID = getIntent().getStringExtra("USER_ID");
 
         mUserName = (TextView) findViewById(R.id.name);
-        mUserCountry = (TextView) findViewById(R.id.country);
-        mUserSchool = (TextView) findViewById(R.id.school);
+        mUserHobby = (TextView) findViewById(R.id.hobby1);
+        mUserAbout = (TextView) findViewById(R.id.about1);
         mUserPhoto = (ImageView) findViewById(R.id.userProfilePic);
+        rating = (RatingBar) findViewById(R.id.rating);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
 
 
@@ -65,52 +69,36 @@ public class UserInfo extends AppCompatActivity {
 
     }
 
-    public void setTitle(String title){
+    public void setTitle(String fname,String lname){
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         TextView textView = new TextView(this);
-        textView.setText(title);
+        textView.setText(fname +" " + lname);
         textView.setTextSize(20);
-        textView.setTypeface(null, Typeface.BOLD);
+        textView.setTypeface(null, Typeface.NORMAL);
         textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         textView.setGravity(Gravity.CENTER);
         textView.setTextColor(getResources().getColor(R.color.white));
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(textView);
     }
-    private DatabaseHelper getHelper() {
-        if (databaseHelper == null) {
-            databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
-        }
-        return databaseHelper;
-    }
 
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        /*
-         * You'll need this in your class to release the helper when done.
-         */
-        if (databaseHelper != null) {
-            OpenHelperManager.releaseHelper();
-            databaseHelper = null;
-        }
-    }
 
     public void setUserData(String mUserID) throws SQLException {
-        final Dao<UserProfile, Integer> userDAO = getHelper().getUserDAO();
+
+
         List<UserProfile> list;
-        QueryBuilder<UserProfile, Integer> queryBuilder = userDAO.queryBuilder();
-        queryBuilder.where().eq("userID", mUserID);
-        list = queryBuilder.query();
+        list = adapter.getUserIDList(mUserID);
 
         for (int i = 0; i < list.size(); i++) {
 
             mUserName.setText(list.get(i).getFirstName() + " " + list.get(i).getLastName());
-            mUserCountry.setText(list.get(i).getCountry());
-            mUserSchool.setText(list.get(i).getSchool());
+            mUserHobby.setText(list.get(i).getHobby());
+            mUserAbout.setText(list.get(i).getIntroduction());
+            rating.setRating((float) 4.5);
+//            mUserCountry.setText(list.get(i).getCountry());
+//            mUserSchool.setText(list.get(i).getSchool());
 
             if (list.get(i).getUserProfilePhoto().equals("")) {
                 Picasso.with(this).load(R.drawable.person).into(mUserPhoto);
@@ -118,19 +106,16 @@ public class UserInfo extends AppCompatActivity {
                 Picasso.with(this).load(list.get(i).getUserProfilePhoto()).into(mUserPhoto);
             }
 
-
+            setTitle(list.get(i).getFirstName(), list.get(i).getLastName());
         }
     }
 
 
 
     public void setmUserPhoto(String mUserID) throws SQLException {
-        final Dao<UserPhoto, Integer> userPhotoDAO = getHelper().getUserPhotoDAO();
-        List<UserPhoto> photoList;
 
-        QueryBuilder<UserPhoto, Integer> queryBuilder1 = userPhotoDAO.queryBuilder();
-        queryBuilder1.where().eq("userId", mUserID);
-        photoList = queryBuilder1.query();
+        List<UserPhoto> photoList;
+        photoList = adapter.getPhotoList(mUserID);
 
         ViewPhotoAdapter viewPagerAdapter = new ViewPhotoAdapter(this, photoList);
 

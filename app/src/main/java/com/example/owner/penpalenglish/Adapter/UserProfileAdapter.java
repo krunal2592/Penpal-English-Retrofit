@@ -41,10 +41,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
     private Context context;
 
 
-    private onLoadMoreListener mOnLoadMoreListener;
-    public void setOnLoadMoreListener(onLoadMoreListener mOnLoadMoreListener) {
-        this.mOnLoadMoreListener = mOnLoadMoreListener;
-    }
+
 
     public UserProfileAdapter(){}
 
@@ -158,6 +155,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
                 public void onClick(View v) {
                    // send this user id to chat messages activity
                     goToUserInfo(dataList.get(position));
+
                 }
             });
         } catch (SQLException e) {
