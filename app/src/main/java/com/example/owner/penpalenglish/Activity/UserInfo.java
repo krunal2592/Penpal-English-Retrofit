@@ -6,10 +6,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.owner.penpalenglish.Adapter.ViewPhotoAdapter;
 import com.example.owner.penpalenglish.DAO.DatabaseHelper;
@@ -28,7 +30,7 @@ public class UserInfo extends AppCompatActivity {
 
     private DatabaseHelper databaseHelper = null;
     private String mUserID;
-    private ImageView mUserPhoto;
+    private ImageView mUserPhoto,chat,book;
     private TextView mUserName, mUserHobby, mUserAbout;
     private RatingBar rating;
     ViewPager viewPager;
@@ -54,8 +56,17 @@ adapter = new ViewPhotoAdapter();
         mUserHobby = (TextView) findViewById(R.id.hobby1);
         mUserAbout = (TextView) findViewById(R.id.about1);
         mUserPhoto = (ImageView) findViewById(R.id.userProfilePic);
+        chat = (ImageView) findViewById(R.id.chat);
+        book = (ImageView) findViewById(R.id.book);
         rating = (RatingBar) findViewById(R.id.rating);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
+
+        chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(UserInfo.this,"Chat Click",Toast.LENGTH_LONG).show();
+            }
+        });
 
 
         try {
@@ -93,9 +104,10 @@ adapter = new ViewPhotoAdapter();
 
         for (int i = 0; i < list.size(); i++) {
 
-            mUserName.setText(list.get(i).getFirstName() + " " + list.get(i).getLastName());
-            mUserHobby.setText(list.get(i).getHobby());
-            mUserAbout.setText(list.get(i).getIntroduction());
+            UserProfile user = list.get(i);
+            mUserName.setText(user.getFirstName() + " " + user.getLastName());
+            mUserHobby.setText(user.getHobby());
+            mUserAbout.setText(user.getIntroduction());
             rating.setRating((float) 4.5);
 //            mUserCountry.setText(list.get(i).getCountry());
 //            mUserSchool.setText(list.get(i).getSchool());

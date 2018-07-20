@@ -47,7 +47,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
 
     public UserProfileAdapter(Context context, List<String> dataList) {
 
-        this.dataList = dataList;
+        this.dataList = setAdapterData();
         this.context = context;
     }
 
