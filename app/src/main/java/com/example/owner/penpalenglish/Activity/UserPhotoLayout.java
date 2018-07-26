@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.GridView;
 
 import com.example.owner.penpalenglish.Adapter.UserPhotoLayoutAdapter;
 import com.example.owner.penpalenglish.Adapter.UserProfileAdapter;
@@ -28,9 +29,10 @@ public class UserPhotoLayout extends AppCompatActivity {
 
         recyclerView = (RecyclerView)findViewById(R.id.userPhotoRecyclerView);
 
+
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(UserPhotoLayout.this);
         adapter = new UserPhotoLayoutAdapter(UserPhotoLayout.this);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
 

@@ -35,7 +35,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
     private List<String> dataList;
     private List<UserProfile> searchList;
     private DatabaseHelper databaseHelper = null;
-   ;
+
 
 
     private Context context;
