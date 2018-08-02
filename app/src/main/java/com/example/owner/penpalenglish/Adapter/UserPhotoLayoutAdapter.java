@@ -9,11 +9,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.owner.penpalenglish.Activity.FullScreenViewActivity;
 import com.example.owner.penpalenglish.Activity.UserInfo;
 import com.example.owner.penpalenglish.DAO.DatabaseHelper;
 import com.example.owner.penpalenglish.Model.UserPhoto;
@@ -73,10 +77,24 @@ public class UserPhotoLayoutAdapter extends RecyclerView.Adapter<UserPhotoLayout
 
 
                 if(photoList != null) {
-
+                    final int pos = position;
 
                     ImageGridAdapter adapter = new ImageGridAdapter(context,photoList);
+                  //  adapter.setDynamic
                     holder.grd.setAdapter(adapter);
+                    holder.grd.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        public void onItemClick(AdapterView parent, View v, int position, long id) {
+
+
+                            Intent i = new Intent(context, FullScreenViewActivity.class);
+                            i.putExtra("position", position);
+                            i.putExtra("userID",userNameList.get(pos).getUserID());
+                            context.startActivity(i);
+                        }
+                    });
+
+
+
 
                 }
 
@@ -90,6 +108,7 @@ public class UserPhotoLayoutAdapter extends RecyclerView.Adapter<UserPhotoLayout
         });
 
     }
+
 
     private void goToUserInfo(String personId) {
         Intent goToUserInfo = new Intent(context, UserInfo.class);
@@ -188,4 +207,6 @@ public class UserPhotoLayoutAdapter extends RecyclerView.Adapter<UserPhotoLayout
         return userPhoto;
 
     }
+
+
 }

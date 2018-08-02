@@ -1,6 +1,7 @@
 package com.example.owner.penpalenglish.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.example.owner.penpalenglish.Activity.FullScreenViewActivity;
 import com.example.owner.penpalenglish.DAO.DatabaseHelper;
 import com.example.owner.penpalenglish.Model.UserPhoto;
 import com.example.owner.penpalenglish.Model.UserProfile;
@@ -58,6 +60,16 @@ public class ViewPhotoAdapter extends PagerAdapter {
 
         ViewPager vp = (ViewPager) container;
         vp.addView(view, 0);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, FullScreenViewActivity.class);
+                intent.putExtra("position",position);
+                intent.putExtra("userId",photoList.get(position).getUserId());
+               // intent.putExtra("userID",photoList.get(position).getUserId());
+                context.startActivity(intent);
+            }
+        });
         return view;
 
     }

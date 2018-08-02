@@ -21,7 +21,15 @@
         </intent-filter>
         </activity>
 
+        <activity android:name=".Activity.MainActivity">
+
+        </activity>
+
         <activity android:name=".Activity.UserInfo">
+
+        </activity>
+
+        <activity android:name=".Activity.FullScreenViewActivity">
 
         </activity>
     </application>

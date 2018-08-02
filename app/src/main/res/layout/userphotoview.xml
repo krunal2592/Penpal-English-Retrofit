@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+>
+    <RelativeLayout
         android:id="@+id/photolayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
-        android:layout_margin="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_height="wrap_content"
         android:background="@color/backcolor"
         android:elevation="3dp"
         android:orientation="vertical"
-        android:paddingBottom="10dp"
-        android:paddingTop="3dp">
+        >
 
             <Button
                 android:id="@+id/name"
@@ -20,7 +19,6 @@
                 android:layout_height="43dp"
                 android:layout_alignParentTop="true"
                 android:layout_gravity="left"
-                android:layout_marginBottom="5dp"
                 android:text="Name"
                 android:textAlignment="viewEnd"
                 android:textColor="@color/black"
@@ -31,18 +29,18 @@
         <GridView
             android:id="@+id/grid_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="265dp"
             android:layout_alignParentBottom="true"
             android:layout_below="@id/name"
             android:columnWidth="90dp"
             android:gravity="center"
-            android:horizontalSpacing="3dp"
+
             android:numColumns="3"
 
             android:stretchMode="columnWidth"
-            android:verticalSpacing="10dp">
+            android:verticalSpacing="5dp">
 
         </GridView>
     </RelativeLayout>
 
-
+</RelativeLayout>
