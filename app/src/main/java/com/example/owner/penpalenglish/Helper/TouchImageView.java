@@ -95,7 +95,9 @@ public class TouchImageView extends android.support.v7.widget.AppCompatImageView
 				case MotionEvent.ACTION_POINTER_UP:
 					mode = NONE;
 					break;
+
 				}
+
 
 				setImageMatrix(matrix);
 				invalidate();

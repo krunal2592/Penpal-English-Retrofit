@@ -77,16 +77,9 @@ public class FullScreenImageAdapter extends PagerAdapter {
 
 		Picasso.with(activity).load(userPhotoList.get(position).getPhotopath()).into(imgDisplay);
 
-		btnClose = viewLayout.findViewById(R.id.btnClose);
-
-
-		// close button click event
-		btnClose.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				activity.finish();
-			}
-		});
+//		btnClose = viewLayout.findViewById(R.id.btnClose);
+//
+//
 
 		container.addView(viewLayout);
 

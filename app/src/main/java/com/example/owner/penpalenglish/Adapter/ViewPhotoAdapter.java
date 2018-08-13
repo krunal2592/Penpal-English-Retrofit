@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 
 import com.example.owner.penpalenglish.Activity.FullScreenViewActivity;
@@ -60,16 +61,19 @@ public class ViewPhotoAdapter extends PagerAdapter {
 
         ViewPager vp = (ViewPager) container;
         vp.addView(view, 0);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, FullScreenViewActivity.class);
-                intent.putExtra("position",position);
-                intent.putExtra("userId",photoList.get(position).getUserId());
-               // intent.putExtra("userID",photoList.get(position).getUserId());
-                context.startActivity(intent);
+
+        view.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                //this will log the page number that was click
+                Intent i = new Intent(context, FullScreenViewActivity.class);
+                i.putExtra("position", position);
+                i.putExtra("userID",photoList.get(position).getUserId());
+                context.startActivity(i);
             }
         });
+
+
+
         return view;
 
     }

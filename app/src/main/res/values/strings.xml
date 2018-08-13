@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Penpal English</string>
+    <string name="buddies">BUDDIES</string>
+    <string name="chit_chat">CHIT-CHAT</string>
+    <string name="home">HOME</string>
+    <string name="chat">CHAT</string>
+    <string name="qa"><![CDATA[Q&A]]></string>
 </resources>

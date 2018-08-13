@@ -66,7 +66,7 @@ public class ImageGridAdapter extends BaseAdapter {
             imageview = new ImageView(mContext);
             imageview.requestLayout();
 
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(450, 450);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(480, 480);
             imageview.setLayoutParams(layoutParams);
             imageview.setScaleType(ImageView.ScaleType.FIT_XY);
 

@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.renderscript.ScriptGroup;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,16 +14,20 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.owner.penpalenglish.Adapter.CustomTabAdapter;
 import com.example.owner.penpalenglish.Adapter.UserProfileAdapter;
 import com.example.owner.penpalenglish.DAO.DatabaseHelper;
 import com.example.owner.penpalenglish.Model.UserProfile;
@@ -42,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private UserProfileAdapter adapter, adapter1;
 
     private RecyclerView recyclerView;
+    private CustomTabAdapter customTabAdapter;
 
     Button filter;
     EditText search;
@@ -57,16 +64,32 @@ public class MainActivity extends AppCompatActivity {
 
         filter = (Button) findViewById(R.id.filter);
         filter.setClipToOutline(true);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab);
 
         search = (EditText)findViewById(R.id.editTextSearch);
+
 
         setTitle("1:1 TUTOR LIST");
         final DataService service = new DataService();
         Boolean data = service.GetDataFromServer();
         populateView();
+        View view1 = getLayoutInflater().inflate(R.layout.customtab, null);
+        customTabAdapter = new CustomTabAdapter(tabLayout,MainActivity.this);
+        customTabAdapter.setTabData(view1);
 
+       // hideSoftKeyboard(MainActivity.this);
+        search.setInputType(InputType.TYPE_NULL);
 
-
+//        search.setOnTouchListener(new View.OnTouchListener(){
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                int inType = search.getInputType(); // backup the input type
+//                search.setInputType(InputType.TYPE_NULL); // disable soft input
+////                search.onTouchEvent(event); // call native handler
+////                search.setInputType(inType); // restore input type
+//                return true; // consume touch even
+//            }
+//        });
 
 
         search.addTextChangedListener(new TextWatcher() {

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/relhome"
+        >
+
+    <ImageView
+        android:id="@+id/tabicon"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+
+        android:background="@drawable/tabhome"
+        android:scaleType="fitCenter" />
+
+        <TextView
+            android:id="@+id/tabname"
+            android:layout_width="122dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="left"
+            android:layout_marginTop="36dp"
+            android:text="@string/home"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="10dp"
+
+            android:layout_alignParentLeft="true" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/relChitchat"
+        >
+
+        <ImageView
+            android:id="@+id/tabchitchaticon"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+
+            android:background="@drawable/tabsmalltalk"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:id="@+id/tabchitchatname"
+            android:layout_width="122dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="left"
+            android:layout_marginTop="36dp"
+            android:text="@string/chit_chat"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="10dp"
+
+            />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/relBuddies"
+        >
+
+        <ImageView
+            android:id="@+id/tabBuddyicon"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+
+            android:background="@drawable/tabtutorlist"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:id="@+id/tabBuddyname"
+            android:layout_width="122dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="left"
+            android:layout_marginTop="36dp"
+            android:text="@string/buddies"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="10dp"
+
+            android:layout_alignParentLeft="true" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/relChat"
+        >
+
+        <ImageView
+            android:id="@+id/tabChaticon"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+
+            android:background="@drawable/tabchat"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:id="@+id/tabChatname"
+            android:layout_width="122dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="left"
+            android:layout_marginTop="36dp"
+            android:text="@string/chat"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="10dp"
+
+            />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@+id/relQA"
+        >
+
+        <ImageView
+            android:id="@+id/tabQaicon"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+
+            android:background="@drawable/tabqa"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:id="@+id/tabQaname"
+            android:layout_width="122dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="left"
+            android:layout_marginTop="36dp"
+            android:text="@string/qa"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="10dp"
+
+            />
+    </RelativeLayout>
+
+</RelativeLayout>
+
+

@@ -82,6 +82,7 @@ public class UserPhotoLayoutAdapter extends RecyclerView.Adapter<UserPhotoLayout
                     ImageGridAdapter adapter = new ImageGridAdapter(context,photoList);
                   //  adapter.setDynamic
                     holder.grd.setAdapter(adapter);
+
                     holder.grd.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         public void onItemClick(AdapterView parent, View v, int position, long id) {
 

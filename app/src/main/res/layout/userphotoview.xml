@@ -9,14 +9,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/backcolor"
-        android:elevation="3dp"
+
         android:orientation="vertical"
         >
 
             <Button
                 android:id="@+id/name"
                 android:layout_width="match_parent"
-                android:layout_height="43dp"
+                android:layout_height="50dp"
                 android:layout_alignParentTop="true"
                 android:layout_gravity="left"
                 android:text="Name"
@@ -32,13 +32,13 @@
             android:layout_height="265dp"
             android:layout_alignParentBottom="true"
             android:layout_below="@id/name"
-            android:columnWidth="90dp"
+
             android:gravity="center"
-
             android:numColumns="3"
-
+            android:horizontalSpacing="0dp"
             android:stretchMode="columnWidth"
             android:verticalSpacing="5dp">
+
 
         </GridView>
     </RelativeLayout>

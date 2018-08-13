@@ -37,5 +37,7 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     compile 'com.github.bumptech.glide:glide:4.2.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.2.0'
+    implementation 'com.android.support:design:27.1.1'
+    compile 'com.aurelhubert:ahbottomnavigation:2.0.4'
 
 }

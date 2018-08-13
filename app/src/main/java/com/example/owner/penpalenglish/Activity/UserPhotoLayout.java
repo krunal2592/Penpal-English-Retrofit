@@ -1,8 +1,11 @@
 package com.example.owner.penpalenglish.Activity;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -11,14 +14,21 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.owner.penpalenglish.Adapter.CustomTabAdapter;
 import com.example.owner.penpalenglish.Adapter.UserPhotoLayoutAdapter;
 import com.example.owner.penpalenglish.Adapter.UserProfileAdapter;
 import com.example.owner.penpalenglish.DAO.DatabaseHelper;
@@ -34,13 +44,16 @@ public class UserPhotoLayout extends AppCompatActivity {
     List<String> userNameList = null;
 
     private RecyclerView recyclerView;
+    private CustomTabAdapter customTabAdapter;
 
+    @SuppressLint("SetTextI18n")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.userphotolayout);
 
         recyclerView = (RecyclerView)findViewById(R.id.userPhotoRecyclerView);
 
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(UserPhotoLayout.this);
         adapter = new UserPhotoLayoutAdapter(UserPhotoLayout.this);
@@ -48,6 +61,19 @@ public class UserPhotoLayout extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         setTitle("1:1 TUTOR LIST");
+
+
+
+        View view1 = getLayoutInflater().inflate(R.layout.customtab, null);
+        customTabAdapter = new CustomTabAdapter(tabLayout,this);
+        customTabAdapter.setTabData(view1);
+
+
+
+
+
+
+
 
     }
 
@@ -94,5 +120,7 @@ public class UserPhotoLayout extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
 
 }
