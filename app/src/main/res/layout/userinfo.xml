@@ -42,7 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="75dp"
         android:layout_below="@+id/viewPager"
-        android:background="@color/red"
+        android:background="@drawable/tabbar_back"
         android:elevation="4dp"
         android:paddingBottom="24dp">
 
@@ -61,88 +61,64 @@
     </RelativeLayout>
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/profile_layout"
-        android:layout_margin="5dp"
-        android:id="@+id/chatbook"
-        android:layout_marginTop="5dp"
-        android:background="@color/backcolor"
-        android:elevation="3dp"
-        android:orientation="vertical"
-        android:paddingTop="3dp"
-        android:paddingBottom="10dp"
-        android:paddingRight="50dp"
-        android:paddingLeft="50dp"
+        <RelativeLayout
+            android:id="@+id/chatbook"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
 
-        >
+            android:layout_below="@+id/profile_layout"
+            android:elevation="3dp"
+            android:orientation="vertical"
+
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
+
+            android:paddingTop="3dp">
 
 
-
-        <ImageView
-            android:src="@drawable/tutor_button_sqchat"
-            android:layout_width="125dp"
-            android:layout_height="125dp"
-            android:scaleType="centerInside"
-            android:id="@+id/chat"/>
-
-        <TextView
-            android:id="@+id/chat1"
-            android:layout_width="126dp"
-            android:layout_height="43dp"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="left"
-            android:layout_marginBottom="21dp"
-            android:text="CHAT"
-            android:textAlignment="center"
-            android:textColor="@color/red"
-            android:textStyle="bold" />
-
-        <ImageView
-            android:id="@+id/book"
-            android:layout_width="125dp"
-            android:layout_height="125dp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-
-            android:scaleType="centerInside"
-            android:src="@drawable/tutor_button_sqbook"
-            android:layout_alignParentRight="true" />
-
-        <TextView
-            android:id="@+id/book1"
-            android:layout_width="126dp"
-            android:layout_height="43dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignStart="@+id/book"
-            android:layout_gravity="left"
-            android:layout_marginBottom="11dp"
-            android:text="Book"
-            android:textAlignment="center"
-            android:textColor="@color/red"
-            android:textStyle="bold"
-            android:layout_alignLeft="@+id/book" />
+            <ImageView
+                android:id="@+id/chat"
+                android:layout_width="125dp"
+                android:layout_height="125dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/tutors_button_sqchat1" />
 
 
+            <ImageView
+                android:id="@+id/book"
+                android:layout_width="125dp"
+                android:layout_height="125dp"
 
-    </RelativeLayout>
+
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="11dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/tutors_button_sqbook1" />
+
+
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/hobbylayout"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/chatbook"
+            android:layout_marginLeft="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginEnd="24dp"
             android:layout_marginTop="5dp"
-            android:elevation="3dp"
             android:background="@color/backcolor"
+            android:elevation="3dp"
             android:orientation="vertical"
             android:paddingBottom="20dp"
             android:paddingLeft="50dp"
             android:paddingRight="50dp"
-            android:paddingTop="3dp"
-            android:layout_alignParentLeft="true">
+            android:paddingTop="3dp">
 
             <TextView
                 android:id="@+id/hobby"
@@ -153,21 +129,23 @@
                 android:layout_alignTop="@+id/hobbylayout"
                 android:layout_gravity="left"
                 android:text="Hobby"
-                android:textAlignment="center"
+
                 android:textColor="@color/red"
                 android:textStyle="bold"
                 tools:ignore="NotSibling,RtlCompat" />
 
+
+
             <TextView
                 android:id="@+id/hobby1"
-                android:layout_width="match_parent"
+                android:layout_width="324dp"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/chatbook"
                 android:layout_alignStart="@+id/chatbook"
                 android:layout_below="@+id/hobby"
                 android:layout_gravity="left"
                 android:text="Hobby"
-                android:textAlignment="center"
+
                 android:textColor="@color/black"
                 tools:ignore="NotSibling" />
         </RelativeLayout>
@@ -175,21 +153,22 @@
         <RelativeLayout
             android:id="@+id/aboutlayout"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
             android:layout_below="@+id/hobbylayout"
             android:background="@color/backgroundcolor"
+            android:layout_marginLeft="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginEnd="24dp"
             android:layout_marginBottom="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginStart="5dp"
+
             android:layout_marginTop="5dp"
             android:elevation="3dp"
             android:orientation="vertical"
-            android:paddingBottom="3dp"
+            android:paddingBottom="20dp"
             android:paddingLeft="50dp"
             android:paddingRight="50dp"
-            android:paddingTop="3dp">
+            android:paddingTop="10dp">
 
         <TextView
             android:id="@+id/about"
@@ -199,11 +178,19 @@
             android:layout_alignTop="@+id/hobbylayout"
             android:layout_gravity="left"
             android:text="About"
-            android:textAlignment="center"
+
             android:textColor="@color/red"
             android:textStyle="bold"
             tools:ignore="NotSibling,RtlCompat"
             android:layout_alignLeft="@+id/hobbylayout" />
+
+            <Button
+                android:id="@+id/relhobby"
+                android:layout_width="33dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/about"
+                android:background="@drawable/appt_arrowdown" />
 
         <TextView
             android:id="@+id/about1"
@@ -213,7 +200,6 @@
             android:layout_below="@+id/about"
             android:layout_gravity="left"
             android:text="About"
-           android:textAlignment="center"
             android:textColor="@color/black"
             android:layout_alignLeft="@+id/hobbylayout"
             tools:ignore="NotSibling" />
@@ -226,14 +212,15 @@
             android:layout_below="@+id/aboutlayout"
             android:background="@color/backgroundcolor"
             android:layout_marginBottom="5dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginStart="5dp"
+
             android:layout_marginTop="5dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginEnd="24dp"
             android:elevation="3dp"
             android:orientation="vertical"
-            android:paddingBottom="3dp"
+            android:paddingBottom="5dp"
             android:paddingLeft="50dp"
             android:paddingRight="50dp"
             android:paddingTop="3dp">
@@ -246,7 +233,7 @@
                 android:layout_alignTop="@+id/aboutlayout"
                 android:layout_gravity="left"
                 android:text="Rating"
-                android:textAlignment="center"
+
                 android:textColor="@color/red"
                 android:textStyle="bold"
                 tools:ignore="NotSibling,RtlCompat"
