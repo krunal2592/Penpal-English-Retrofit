@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -87,8 +88,9 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
 
         public final View mView;
 
-        TextView txtName, txtCountry, txtIntroduction;
-        private ImageView userImage;
+        TextView txtName, txtIntroduction;
+        private ImageView userImage,txtCountry;
+        RecyclerView recyclerView;
 
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         CustomViewHolder(View itemView) {
@@ -99,6 +101,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
             txtCountry = mView.findViewById(R.id.country);
             txtIntroduction = mView.findViewById(R.id.introduction);
            userImage = mView.findViewById(R.id.profile_pic);
+
             //userImage.setClipToOutline(true);
         }
     }
@@ -112,7 +115,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
     }
 
     @Override
-    public void onBindViewHolder(CustomViewHolder holder, final int position) {
+    public void onBindViewHolder(final CustomViewHolder holder, final int position) {
 
         try {
             final Dao<UserProfile, Integer> userDAO = getHelper().getUserDAO();
@@ -133,7 +136,27 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
                     UserProfile user = list.get(0);
                      if ((user.getFirstName() != null ) && (user.getLastName() != null )) {
                              holder.txtName.setText(user.getFirstName() + " " + user.getLastName());
-                             holder.txtCountry.setText(user.getCountry());
+
+                             if(user.getCountry() != null) {
+                                 if (user.getCountry().equals("Canada")) {
+                                     holder.txtCountry.setImageResource(R.drawable.flag_canada);
+                                 }
+                                 if (user.getCountry().equals("USA")) {
+                                     holder.txtCountry.setImageResource(R.drawable.flag_america);
+                                 }
+
+                                 if (user.getCountry().equals("UK")) {
+                                     holder.txtCountry.setImageResource(R.drawable.flag_uk);
+                                 }
+
+                                 if (user.getCountry().equals("China")) {
+                                     holder.txtCountry.setImageResource(R.drawable.flag_china);
+                                 }
+
+                                 if (user.getCountry().equals("Australia")) {
+                                     holder.txtCountry.setImageResource(R.drawable.flag_australia);
+                                 }
+                             }
                              holder.txtIntroduction.setText(user.getIntroduction());
 
                              Picasso.Builder builder = new Picasso.Builder(context);
@@ -158,6 +181,10 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
 
                 }
             });
+
+
+
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -64,11 +65,13 @@ public class MainActivity extends AppCompatActivity {
 
         filter = (Button) findViewById(R.id.filter);
         filter.setClipToOutline(true);
+
+        recyclerView = findViewById(R.id.recyclerView);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab);
 
         search = (EditText)findViewById(R.id.editTextSearch);
 
-
+        search.setClipToOutline(true);
         setTitle("1:1 TUTOR LIST");
         final DataService service = new DataService();
         Boolean data = service.GetDataFromServer();
@@ -77,19 +80,7 @@ public class MainActivity extends AppCompatActivity {
         customTabAdapter = new CustomTabAdapter(tabLayout,MainActivity.this);
         customTabAdapter.setTabData(view1);
 
-       // hideSoftKeyboard(MainActivity.this);
-        search.setInputType(InputType.TYPE_NULL);
 
-//        search.setOnTouchListener(new View.OnTouchListener(){
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                int inType = search.getInputType(); // backup the input type
-//                search.setInputType(InputType.TYPE_NULL); // disable soft input
-////                search.onTouchEvent(event); // call native handler
-////                search.setInputType(inType); // restore input type
-//                return true; // consume touch even
-//            }
-//        });
 
 
         search.addTextChangedListener(new TextWatcher() {
@@ -110,7 +101,49 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+
+
+        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+
+
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                // TODO Auto-generated method stub
+                switch(scrollState) {
+                    case 2: // SCROLL_STATE_FLING
+                        //hide button here
+                        search.setVisibility(View.GONE);
+                        filter.setVisibility(View.GONE);
+                        break;
+
+                    case 1: // SCROLL_STATE_TOUCH_SCROLL
+                        //hide button here
+                        search.setVisibility(View.GONE);
+                        filter.setVisibility(View.GONE);
+                        break;
+
+                    case 0: // SCROLL_STATE_IDLE
+                        //show button here
+                        search.setVisibility(View.GONE);
+                        filter.setVisibility(View.GONE);
+                        break;
+
+                    default:
+                        //show button here
+                        search.setVisibility(View.VISIBLE);
+                        filter.setVisibility(View.VISIBLE);
+                        break;
+                }
+            }
+        });
+
+
     }
+
 
 
     public static void hideSoftKeyboard(Activity activity) {
@@ -168,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             userDAO = getHelper().getUserDAO();
 
-            recyclerView = findViewById(R.id.recyclerView);
+
 
 
             adapter1 = new UserProfileAdapter();

@@ -7,9 +7,12 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +38,7 @@ public class UserInfo extends AppCompatActivity {
     private RatingBar rating;
     ViewPager viewPager;
     ViewPhotoAdapter adapter;
+    private Button relhobby;
 
     private ActionBar toolbar;
 
@@ -47,7 +51,7 @@ public class UserInfo extends AppCompatActivity {
 
 
 
-adapter = new ViewPhotoAdapter();
+        adapter = new ViewPhotoAdapter();
 
 
         mUserID = getIntent().getStringExtra("USER_ID");
@@ -60,13 +64,11 @@ adapter = new ViewPhotoAdapter();
         book = (ImageView) findViewById(R.id.book);
         rating = (RatingBar) findViewById(R.id.rating);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
+        relhobby = (Button)findViewById(R.id.relhobby);
 
-        chat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(UserInfo.this,"Chat Click",Toast.LENGTH_LONG).show();
-            }
-        });
+
+
+
 
 
         try {
@@ -78,7 +80,23 @@ adapter = new ViewPhotoAdapter();
         }
 
 
+        relhobby.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                RelativeLayout relHobby = (RelativeLayout)findViewById(R.id.aboutlayout);
+
+                ViewGroup.LayoutParams params = relHobby.getLayoutParams();
+                params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                relHobby.setLayoutParams(params);
+                //relHobby.getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+                //Toast.makeText(UserInfo.this,"Down arrow clicked",Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
+
+
 
     public void setTitle(String fname,String lname){
         getSupportActionBar().setHomeButtonEnabled(true);
