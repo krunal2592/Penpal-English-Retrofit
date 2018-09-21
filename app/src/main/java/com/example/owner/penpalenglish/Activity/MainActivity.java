@@ -1,88 +1,160 @@
 package com.example.owner.penpalenglish.Activity;
 
-import android.app.ProgressDialog;
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Typeface;
+import android.os.Build;
+import android.renderscript.ScriptGroup;
+import android.support.annotation.RequiresApi;
+import android.support.design.widget.TabLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Toast;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.example.owner.penpalenglish.Adapter.CustomTabAdapter;
 import com.example.owner.penpalenglish.Adapter.UserProfileAdapter;
 import com.example.owner.penpalenglish.DAO.DatabaseHelper;
-import com.example.owner.penpalenglish.DAO.UserDAO;
-import com.example.owner.penpalenglish.DAO.UserPhotoDAO;
-import com.example.owner.penpalenglish.Model.UserPhoto;
 import com.example.owner.penpalenglish.Model.UserProfile;
 import com.example.owner.penpalenglish.R;
-import com.example.owner.penpalenglish.Service.GetDataService;
-import com.example.owner.penpalenglish.Service.RetrofitClientInstance;
+import com.example.owner.penpalenglish.Service.DataService;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
+import static android.graphics.drawable.ClipDrawable.HORIZONTAL;
 
 public class MainActivity extends AppCompatActivity {
 
     private DatabaseHelper databaseHelper = null;
 
-    private UserProfileAdapter adapter;
+    private UserProfileAdapter adapter, adapter1;
+
     private RecyclerView recyclerView;
+    private CustomTabAdapter customTabAdapter;
+
+    Button filter;
+    EditText search;
 
 
+
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*Create handle for the RetrofitInstance interface*/
+        filter = (Button) findViewById(R.id.filter);
+        filter.setClipToOutline(true);
 
-        GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
+        recyclerView = findViewById(R.id.recyclerView);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab);
 
-        Call<List<UserProfile>> call = service.getAllUser();
-        call.enqueue(new Callback<List<UserProfile>>() {
+        search = (EditText)findViewById(R.id.editTextSearch);
 
+        search.setClipToOutline(true);
+        setTitle("1:1 TUTOR LIST");
+
+        populateView();
+        View view1 = getLayoutInflater().inflate(R.layout.customtab, null);
+        customTabAdapter = new CustomTabAdapter(tabLayout,MainActivity.this);
+        customTabAdapter.setTabData(view1);
+
+
+
+
+        search.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onResponse(Call<List<UserProfile>> call, Response<List<UserProfile>> response) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                try {
-
-                    final Dao<UserProfile, Integer> userDAO = getHelper().getUserDAO();
-                    int count = userDAO.queryForAll().size();
-                    if(userDAO.queryForAll().size()<1 ) {
-                        InsertData(response.body());
-                    }
-
-
-
-
-
-
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
 
             }
 
             @Override
-            public void onFailure(Call<List<UserProfile>> call, Throwable t) {
-                // progressDoalog.dismiss();
-                Toast.makeText(MainActivity.this, "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+            public void onTextChanged(CharSequence searchString, int start, int before, int count) {
+                adapter.setSearchList(String.valueOf(searchString));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                hideSoftKeyboard(MainActivity.this);
+
             }
         });
 
-        //populate the View
-        populateView();
+
+
+        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+
+
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                // TODO Auto-generated method stub
+                switch(scrollState) {
+                    case 2: // SCROLL_STATE_FLING
+                        //hide button here
+                        search.setVisibility(View.GONE);
+                        filter.setVisibility(View.GONE);
+                        break;
+
+                    case 1: // SCROLL_STATE_TOUCH_SCROLL
+                        //hide button here
+                        search.setVisibility(View.GONE);
+                        filter.setVisibility(View.GONE);
+                        break;
+
+                    case 0: // SCROLL_STATE_IDLE
+                        //show button here
+                        search.setVisibility(View.GONE);
+                        filter.setVisibility(View.GONE);
+                        break;
+
+                    default:
+                        //show button here
+                        search.setVisibility(View.VISIBLE);
+                        filter.setVisibility(View.VISIBLE);
+                        break;
+                }
+            }
+        });
 
 
     }
+
+
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
+
+
 
     // This is how, DatabaseHelper can be initialized for future use
     private DatabaseHelper getHelper() {
@@ -106,6 +178,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void setTitle(String title){
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        TextView textView = new TextView(this);
+        textView.setText(title);
+        textView.setTextSize(20);
+        textView.setTypeface(null, Typeface.BOLD);
+        textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        textView.setGravity(Gravity.CENTER);
+        textView.setTextColor(getResources().getColor(R.color.white));
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(textView);
+
+    }
+
     /*Method to generate List of data using RecyclerView with custom adapter*/
     private void populateView()  {
 
@@ -113,62 +200,55 @@ public class MainActivity extends AppCompatActivity {
         try {
             userDAO = getHelper().getUserDAO();
 
-            recyclerView = findViewById(R.id.recyclerView);
-            adapter = new UserProfileAdapter(this, userDAO.queryForAll());
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
 
+
+
+            adapter1 = new UserProfileAdapter();
+            List<String> userIDList = adapter1.setAdapterData();
+            adapter = new UserProfileAdapter(this,userIDList);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+            final DataService service = new DataService();
+            Boolean data = service.GetDataFromServer();
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(adapter);
 
+            DividerItemDecoration itemDecor = new DividerItemDecoration(this, HORIZONTAL);
+            recyclerView.addItemDecoration(itemDecor);
+
         } catch (SQLException e) {
             e.printStackTrace();
+
         }
 
     }
 
-    // Method for Inserting Data into a Table
-
-    private void InsertData(List<UserProfile> userList)
-    {
-        try {
-            final Dao<UserProfile, Integer> userDAO = getHelper().getUserDAO();
-            final Dao<UserPhoto, Integer> userPhotoDAO = getHelper().getUserPhotoDAO();
-
-            List<UserPhoto> userPhotos;
-
-            for(int i=0;i<=userList.size();i++) {
-
-                UserProfile userProfile = userList.get(i);
-
-                userPhotos = (List<UserPhoto>) userList.get(i).getUserPhotos();
-
-                if(userList.get(i).getUserPhotos().size()>0)
-                {
-                    for(int j =0; j<userPhotos.size(); j++)
-                    {
-                        UserPhoto userPhoto = userPhotos.get(j);
-
-                        if(userPhoto.getAvatar() == 1) {
-                            userProfile.setUserProfilePhoto("http://54.148.5.0:8080/giaserver/" + userPhoto.getUserId() + "/profile/media/" + userPhoto.getPhotoId());
-                           }
-
-                        userPhoto.setPhotopath("http://54.148.5.0:8080/giaserver/" + userPhoto.getUserId() + "/profile/media/" + userPhoto.getPhotoId());
-                        userPhotoDAO.create(userPhoto);
-                    }
-                }
-                else
-                {
-                    userProfile.setUserProfilePhoto("");
-                }
-
-                userDAO.create(userProfile);
-
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
     }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id){
+            case R.id.photView:
+
+                Intent switchView = new Intent(this, UserPhotoLayout.class);
+
+                this.startActivity(switchView);
+
+
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
 
 }

@@ -1,22 +1,29 @@
 package com.example.owner.penpalenglish.Activity;
 
-import android.accounts.Account;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.EditText;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.owner.penpalenglish.Adapter.ViewPhotoAdapter;
 import com.example.owner.penpalenglish.DAO.DatabaseHelper;
 import com.example.owner.penpalenglish.Model.UserPhoto;
 import com.example.owner.penpalenglish.Model.UserProfile;
 import com.example.owner.penpalenglish.R;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
-import com.j256.ormlite.stmt.Where;
 import com.squareup.picasso.Picasso;
 
 import java.sql.SQLException;
@@ -25,77 +32,123 @@ import java.util.List;
 public class UserInfo extends AppCompatActivity {
 
     private DatabaseHelper databaseHelper = null;
-    UserProfile user;
     private String mUserID;
-    private ImageView mUserPhoto;
-    private TextView mUserName, mUserCountry, mUserSchool;
+    private ImageView mUserPhoto,chat,book;
+    private TextView mUserName, mUserHobby, mUserAbout;
+    private RatingBar rating;
+    ViewPager viewPager;
+    ViewPhotoAdapter adapter;
+    private Button relhobby;
+
+    private ActionBar toolbar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.userinfo);
 
+
+
+
+        adapter = new ViewPhotoAdapter();
+
+
         mUserID = getIntent().getStringExtra("USER_ID");
 
         mUserName = (TextView) findViewById(R.id.name);
-        mUserCountry = (TextView) findViewById(R.id.country);
-        mUserSchool = (TextView) findViewById(R.id.school);
+        mUserHobby = (TextView) findViewById(R.id.hobby1);
+        mUserAbout = (TextView) findViewById(R.id.about1);
         mUserPhoto = (ImageView) findViewById(R.id.userProfilePic);
+        chat = (ImageView) findViewById(R.id.chat);
+        book = (ImageView) findViewById(R.id.book);
+        rating = (RatingBar) findViewById(R.id.rating);
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        relhobby = (Button)findViewById(R.id.relhobby);
+
+
+
+
 
 
         try {
-
-            final Dao<UserProfile, Integer> userDAO = getHelper().getUserDAO();
-            final Dao<UserPhoto, Integer> userPhotoDAO = getHelper().getUserPhotoDAO();
-            List<UserProfile> list;
-
-
-            QueryBuilder<UserProfile, Integer> queryBuilder = userDAO.queryBuilder();
-            queryBuilder.where().eq("userID", mUserID);
-            list = queryBuilder.query();
-
-            for(int i =0;i<list.size(); i++) {
-
-                mUserName.setText(list.get(i).getFirstName() + " "+ list.get(i).getLastName());
-                mUserCountry.setText(list.get(i).getCountry());
-                mUserSchool.setText(list.get(i).getSchool());
-
-                if(list.get(i).getUserProfilePhoto().equals("")) {
-                    Picasso.with(this).load(R.drawable.person).into(mUserPhoto);
-                }
-                else
-                {
-                    Picasso.with(this).load(list.get(i).getUserProfilePhoto()).into(mUserPhoto);
-                }
-            }
+            setUserData(mUserID);
+            setmUserPhoto(mUserID);
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
 
-        List<UserPhoto> userPhotos;
+        relhobby.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                RelativeLayout relHobby = (RelativeLayout)findViewById(R.id.aboutlayout);
+
+                ViewGroup.LayoutParams params = relHobby.getLayoutParams();
+                params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                relHobby.setLayoutParams(params);
+                //relHobby.getLayoutParams().height = RelativeLayout.LayoutParams.WRAP_CONTENT;
+                //Toast.makeText(UserInfo.this,"Down arrow clicked",Toast.LENGTH_LONG).show();
+            }
+        });
 
     }
-        private DatabaseHelper getHelper() {
-            if (databaseHelper == null) {
-                databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+
+
+
+    public void setTitle(String fname,String lname){
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        TextView textView = new TextView(this);
+        textView.setText(fname +" " + lname);
+        textView.setTextSize(20);
+        textView.setTypeface(null, Typeface.NORMAL);
+        textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        textView.setGravity(Gravity.CENTER);
+        textView.setTextColor(getResources().getColor(R.color.white));
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(textView);
+    }
+
+
+
+    public void setUserData(String mUserID) throws SQLException {
+
+
+        List<UserProfile> list;
+        list = adapter.getUserIDList(mUserID);
+
+        for (int i = 0; i < list.size(); i++) {
+
+            UserProfile user = list.get(i);
+            mUserName.setText(user.getFirstName() + " " + user.getLastName());
+            mUserHobby.setText(user.getHobby());
+            mUserAbout.setText(user.getIntroduction());
+            rating.setRating((float) 4.5);
+//            mUserCountry.setText(list.get(i).getCountry());
+//            mUserSchool.setText(list.get(i).getSchool());
+
+            if (list.get(i).getUserProfilePhoto().equals("")) {
+                Picasso.with(this).load(R.drawable.person).into(mUserPhoto);
+            } else {
+                Picasso.with(this).load(list.get(i).getUserProfilePhoto()).into(mUserPhoto);
             }
-            return databaseHelper;
+
+            setTitle(list.get(i).getFirstName(), list.get(i).getLastName());
         }
+    }
 
 
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void setmUserPhoto(String mUserID) throws SQLException {
 
-        /*
-         * You'll need this in your class to release the helper when done.
-         */
-        if (databaseHelper != null) {
-            OpenHelperManager.releaseHelper();
-            databaseHelper = null;
-        }
+        List<UserPhoto> photoList;
+        photoList = adapter.getPhotoList(mUserID);
+
+        ViewPhotoAdapter viewPagerAdapter = new ViewPhotoAdapter(this, photoList);
+
+        viewPager.setAdapter(viewPagerAdapter);
     }
 }
